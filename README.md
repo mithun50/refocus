@@ -132,8 +132,16 @@
 - [ ] **Phase 5**: AI Study Coach & personalized preparation plans.
 - [ ] **Phase 6**: Verified study rooms and campus/exam communities.
 
+## Community & Contributing
+
+We welcome contributions of all kinds! Please see the following guides:
+- 📖 [Contributing Guide](CONTRIBUTING.md) — Setup, architecture, coding guidelines, and PR process.
+- 📜 [Code of Conduct](CODE_OF_CONDUCT.md) — Standards and expectations for the Refocus community.
+- 🤖 [Agent Guide (AGENTS.md)](AGENTS.md) — Architectural guardrails and operational manual for AI/LLM assistants.
+- 🛡️ [Security Policy](SECURITY.md) — Responsible vulnerability reporting and privacy architecture.
+
 ---
 
-##  License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
