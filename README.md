@@ -1,4 +1,4 @@
-# 🎯 Refocus
+#  Refocus
 
 <p align="center">
   <img src="assets/images/logo.png" alt="Refocus Logo" width="160" />
@@ -8,31 +8,31 @@
 
 ---
 
-## 📖 Overview
+## Overview
 
 **Refocus** is built to help students, developers, and professionals reclaim deep concentration. Unlike apps that rely purely on frontend timers, **Refocus** uses a dual-engine architecture: a calm, modern Flutter interface powered by a resilient, event-driven Kotlin native background blocking service with native screen pinning.
 
 ---
 
-## ✨ Features
+##  Features
 
-### 📊 Track Your Focus & Analytics
+### Track Your Focus & Analytics
 - **Interactive 7-Day Focus Graph**: Real-time weekly bar charts (Mon–Sun) tracking focused minutes against daily goals.
 - **Focus Mastery Score (0–100)**: Visual arc gauge measuring study consistency, streak retention, and session completion rate.
 - **Peak Performance Window**: Hourly distribution analysis across Morning, Afternoon, Evening, and Night.
 - **Distraction Shield Metrics**: Track blocked distracting apps and completed vs interrupted sessions.
 
-### 🔒 Resilient Native App Blocker
+### Resilient Native App Blocker
 - **Instant Intervention**: When a user attempts to open a blocked app, `RefocusAccessibilityService` triggers within milliseconds, launching `BlockActivity` immediately to intercept the launch.
 - **Smart Notification Shield**: `RefocusNotificationListener` automatically detects alerts originating from blacklisted apps and mutes them silently while in an active session.
 - **Zero-Bypass Native Home**: Tapping "Return to Focus" routes directly back to Refocus with cleared backstacks.
 
-### 📌 Screen Pinning (Locked Focus)
+###  Screen Pinning (Locked Focus)
 - **Home & Recents Restricted**: Disables the home button, recents overview, and status bar pull-down to eliminate reflex phone checks.
 - **Safety Valve Intact**: Fully preserves Android's standard physical exit gesture (holding Back + Overview / swipe up & hold) to ensure emergency access at all times; gesture unpinning is gracefully logged as an interrupted session.
 - **Automatic Release**: Automatically unpins the device upon natural session completion.
 
-### ⏱️ Timestamp-Based Focus Timer & 3-Tier Strict Mode
+###  Timestamp-Based Focus Timer & 3-Tier Strict Mode
 - Calculates remaining time dynamically using timestamps (`plannedEndTime - currentTimeMillis()`), eliminating timer drift when the screen is locked or the device sleeps.
 - **3 Strictness Tiers**:
   - **Off (Normal Mode)**: Standard session with immediate cancellation option.
@@ -41,7 +41,7 @@
 
 ---
 
-## 🏗️ Technical Architecture
+##  Technical Architecture
 
 ```text
 ┌──────────────────────────────────────────────────────────────┐
@@ -73,7 +73,7 @@
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### Prerequisites
 - [Flutter SDK](https://flutter.dev/docs/get-started/install) (3.24+ recommended)
@@ -110,7 +110,7 @@
 
 ---
 
-## 📱 Android Permissions Explained
+##  Android Permissions Explained
 
 | Permission | Reason |
 | :--- | :--- |
@@ -122,7 +122,7 @@
 
 ---
 
-## 🗺️ Product Roadmap
+##  Product Roadmap
 
 - [x] **Phase 1: Core Focus & Resilient App Blocking** *(Completed)*
 - [x] **Phase 1.5: Locked Mode & Screen Pinning** *(Completed)*
@@ -134,6 +134,6 @@
 
 ---
 
-## 📄 License
+##  License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
