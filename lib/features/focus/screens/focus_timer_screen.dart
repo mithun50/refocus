@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../app/theme.dart';
+import '../../../core/models/focus_session.dart';
 import '../../../core/providers/core_providers.dart';
 import '../../../core/utils/time_utils.dart';
 import '../../../core/widgets/refocus_components.dart';
@@ -109,17 +110,12 @@ class _FocusTimerScreenState extends ConsumerState<FocusTimerScreen> with Widget
       canPop: false,
       onPopInvokedWithResult: (didPop, _) {
         if (didPop) return;
-        if (activeSession.isLockedMode) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Session is in Locked Mode. Early cancellation is disabled.'),
-              backgroundColor: AppColors.danger,
-              duration: Duration(seconds: 2),
-            ),
-          );
-          return;
-        }
-        _promptStopSession(context, activeSession.isFrictionMode, focusNotifier);
+        _promptStopSession(
+          context,
+          activeSession.strictModeType,
+          focusNotifier,
+          activeSession,
+        );
       },
       child: Scaffold(
         body: SafeArea(
@@ -134,17 +130,12 @@ class _FocusTimerScreenState extends ConsumerState<FocusTimerScreen> with Widget
                     IconButton(
                       icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
                       onPressed: () {
-                        if (activeSession.isLockedMode) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Session is in Locked Mode. Early cancellation is disabled.'),
-                              backgroundColor: AppColors.danger,
-                              duration: Duration(seconds: 2),
-                            ),
-                          );
-                          return;
-                        }
-                        _promptStopSession(context, activeSession.isFrictionMode, focusNotifier);
+                        _promptStopSession(
+                          context,
+                          activeSession.strictModeType,
+                          focusNotifier,
+                          activeSession,
+                        );
                       },
                     ),
                     Text(
@@ -350,36 +341,53 @@ class _FocusTimerScreenState extends ConsumerState<FocusTimerScreen> with Widget
 
                 // Stop / Commitment UI Control
                 if (activeSession.isLockedMode)
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    decoration: BoxDecoration(
-                      color: AppColors.surfaceContainerHigh,
-                      borderRadius: AppRadius.smallRadius,
-                      border: Border.all(color: AppColors.danger, width: AppBorders.standard),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: AppColors.shadowColor,
-                          offset: Offset(3, 3),
-                          blurRadius: 0,
+                  Column(
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                        decoration: BoxDecoration(
+                          color: AppColors.surfaceContainerHigh,
+                          borderRadius: AppRadius.smallRadius,
+                          border: Border.all(color: AppColors.danger, width: AppBorders.standard),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: AppColors.shadowColor,
+                              offset: Offset(3, 3),
+                              blurRadius: 0,
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(Icons.lock_rounded, color: AppColors.danger, size: 18),
-                        const SizedBox(width: 10),
-                        Text(
-                          'Locked Mode • Runs until timer finishes',
-                          style: GoogleFonts.inter(
-                            color: AppColors.danger,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w800,
-                          ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(Icons.lock_rounded, color: AppColors.danger, size: 16),
+                            const SizedBox(width: 8),
+                            Text(
+                              'Locked Mode Active',
+                              style: GoogleFonts.inter(
+                                color: AppColors.danger,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                      const SizedBox(height: 10),
+                      RefocusButton(
+                        text: 'Emergency Friction Exit',
+                        icon: Icons.emergency_rounded,
+                        variant: RefocusButtonVariant.outlined,
+                        height: 44,
+                        onPressed: () => _promptStopSession(
+                          context,
+                          activeSession.strictModeType,
+                          focusNotifier,
+                          activeSession,
+                        ),
+                      ),
+                    ],
                   )
                 else
                   RefocusButton(
@@ -388,8 +396,9 @@ class _FocusTimerScreenState extends ConsumerState<FocusTimerScreen> with Widget
                     variant: RefocusButtonVariant.danger,
                     onPressed: () => _promptStopSession(
                       context,
-                      activeSession.isFrictionMode,
+                      activeSession.strictModeType,
                       focusNotifier,
+                      activeSession,
                     ),
                   ),
 
@@ -416,13 +425,22 @@ class _FocusTimerScreenState extends ConsumerState<FocusTimerScreen> with Widget
 
   void _promptStopSession(
     BuildContext context,
-    bool isFrictionMode,
+    StrictModeType strictModeType,
     FocusSessionNotifier focusNotifier,
+    FocusSessionModel activeSession,
   ) {
     StrictModeStopDialog.show(
       context,
-      isStrictMode: isFrictionMode,
+      strictModeType: strictModeType,
       onConfirmStop: () async {
+        if (strictModeType == StrictModeType.locked) {
+          final sessionState = ref.read(focusSessionProvider);
+          ref.read(analyticsServiceProvider).logEmergencyExit(
+                sessionId: activeSession.id,
+                remainingSeconds: ref.read(timerProvider).remainingSeconds,
+                wasScreenPinned: sessionState.isScreenPinned,
+              );
+        }
         await focusNotifier.stopSession(isInterrupted: true);
         if (context.mounted) {
           context.go('/home');

@@ -4,6 +4,7 @@ class AppConstants {
 
   // Shared preferences keys
   static const String keyHasCompletedOnboarding = 'has_completed_onboarding';
+  static const String keyHasAcceptedTerms = 'has_accepted_terms';
   static const String keyUserName = 'user_name';
   static const String defaultUserName = 'Focus Champion';
   static const String keyDefaultDurationMinutes = 'default_duration_minutes';

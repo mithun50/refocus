@@ -341,7 +341,7 @@ class _SessionSetupScreenState extends ConsumerState<SessionSetupScreen> {
                                   children: [
                                     Text(
                                       _strictMode == StrictModeType.locked
-                                          ? 'Locked Mode (No Exit)'
+                                          ? 'Locked Mode (Emergency Exit)'
                                           : (_strictMode == StrictModeType.friction
                                               ? 'Friction Mode (5s + STOP)'
                                               : 'Standard Mode'),
@@ -354,7 +354,7 @@ class _SessionSetupScreenState extends ConsumerState<SessionSetupScreen> {
                                     const SizedBox(height: 2),
                                     Text(
                                       _strictMode == StrictModeType.locked
-                                          ? 'No early exit allowed. Runs until timer completes.'
+                                          ? 'Maximum commitment. Requires 10s countdown + typing STOP to emergency exit.'
                                           : (_strictMode == StrictModeType.friction
                                               ? 'Requires 5s countdown + typing STOP to cancel.'
                                               : 'Standard focus. Give up option readily available.'),
@@ -407,7 +407,7 @@ class _SessionSetupScreenState extends ConsumerState<SessionSetupScreen> {
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
                             color: _pinPhoneToApp
-                                ? AppColors.primary.withOpacity(0.16)
+                                ? AppColors.primary.withValues(alpha: 0.16)
                                 : AppColors.surfaceElevated,
                             borderRadius: AppRadius.smallRadius,
                             border: Border.all(

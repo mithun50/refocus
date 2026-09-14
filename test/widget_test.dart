@@ -10,8 +10,11 @@ import 'package:refocus_again/core/providers/core_providers.dart';
 import 'package:refocus_again/core/services/permission_service.dart';
 import 'package:refocus_again/core/utils/time_utils.dart';
 import 'package:refocus_again/core/widgets/refocus_components.dart';
+import 'package:refocus_again/core/services/analytics_service.dart';
+import 'package:refocus_again/features/focus/widgets/strict_mode_dialog.dart';
 import 'package:refocus_again/features/onboarding/providers/onboarding_provider.dart';
 import 'package:refocus_again/features/onboarding/screens/name_setup_screen.dart';
+import 'package:refocus_again/features/onboarding/screens/welcome_screen.dart';
 
 void main() {
   group('TimeUtils Tests', () {
@@ -246,5 +249,105 @@ void main() {
       expect(find.text('John Doe'), findsOneWidget);
     });
   });
+
+  group('AnalyticsService Tests', () {
+    test('logs events and notifies registered dispatchers', () async {
+      final analytics = AnalyticsService();
+      final capturedEvents = <String>[];
+
+      analytics.registerDispatcher(_TestDispatcher((name, params) {
+        capturedEvents.add(name);
+      }));
+
+      await analytics.logTermsAccepted();
+      await analytics.logEmergencyExit(remainingSeconds: 600, wasScreenPinned: true);
+
+      expect(capturedEvents, contains('terms_and_privacy_accepted'));
+      expect(capturedEvents, contains('locked_mode_emergency_exit'));
+      expect(analytics.recentEvents.any((e) => e.name == 'locked_mode_emergency_exit'), true);
+    });
+  });
+
+  group('WelcomeScreen Terms & Privacy Tests', () {
+    testWidgets('requires agreeing to terms before Get Started button is enabled', (tester) async {
+      SharedPreferences.setMockInitialValues({});
+      final prefs = await SharedPreferences.getInstance();
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            sharedPreferencesProvider.overrideWithValue(prefs),
+          ],
+          child: MaterialApp(
+            theme: AppTheme.darkTheme,
+            home: const WelcomeScreen(),
+          ),
+        ),
+      );
+
+      expect(find.text('REFOCUS'), findsOneWidget);
+      expect(find.byType(Checkbox), findsOneWidget);
+
+      // Find the Get Started button
+      final getStartedFinder = find.widgetWithText(RefocusButton, 'Get Started');
+      expect(getStartedFinder, findsOneWidget);
+
+      // Initially disabled (onPressed is null)
+      var button = tester.widget<RefocusButton>(getStartedFinder);
+      expect(button.onPressed, isNull);
+
+      // Tap checkbox to agree
+      await tester.tap(find.byType(Checkbox));
+      await tester.pump();
+
+      // Now enabled
+      button = tester.widget<RefocusButton>(getStartedFinder);
+      expect(button.onPressed, isNotNull);
+    });
+  });
+
+  group('StrictModeStopDialog Emergency Exit Tests', () {
+    testWidgets('Locked mode displays emergency friction prompt', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.darkTheme,
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () {
+                  StrictModeStopDialog.show(
+                    context,
+                    strictModeType: StrictModeType.locked,
+                    onConfirmStop: () {},
+                  );
+                },
+                child: const Text('Open'),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('Open'));
+      await tester.pump();
+
+      expect(find.text('Emergency Exit'), findsOneWidget);
+      expect(find.textContaining('Locked Mode protects your deep work'), findsOneWidget);
+      expect(find.textContaining('Emergency Stop & Unpin'), findsOneWidget);
+
+      // Fast forward past countdown
+      await tester.pump(const Duration(seconds: 11));
+    });
+  });
+}
+
+class _TestDispatcher implements AnalyticsDispatcher {
+  final void Function(String name, Map<String, dynamic> params) onEvent;
+  _TestDispatcher(this.onEvent);
+
+  @override
+  Future<void> logEvent(String name, Map<String, dynamic> parameters) async {
+    onEvent(name, parameters);
+  }
 }
 

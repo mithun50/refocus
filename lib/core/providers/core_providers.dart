@@ -1,8 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../database/app_database.dart';
+import '../services/analytics_service.dart';
 import '../services/native_bridge_service.dart';
 import '../services/permission_service.dart';
+
+final analyticsServiceProvider = Provider<AnalyticsService>((ref) {
+  return AnalyticsService();
+});
 
 final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
   throw UnimplementedError('Initialize in main()');

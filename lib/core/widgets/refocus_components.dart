@@ -297,7 +297,7 @@ class RefocusCard extends StatelessWidget {
           child: InkWell(
             onTap: onTap,
             borderRadius: BorderRadius.circular(borderRadius),
-            splashColor: AppColors.neonMint.withOpacity(0.12),
+            splashColor: AppColors.neonMint.withValues(alpha: 0.12),
             child: cardContent,
           ),
         ),
@@ -356,7 +356,7 @@ class RefocusIconButton extends StatelessWidget {
         child: InkWell(
           onTap: onPressed,
           borderRadius: BorderRadius.circular(AppRadius.large),
-          splashColor: AppColors.neonMint.withOpacity(0.15),
+          splashColor: AppColors.neonMint.withValues(alpha: 0.15),
           child: Center(
             child: Icon(
               icon,
@@ -874,10 +874,22 @@ class RefocusBottomNavigation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final items = [
-      _NavItem(icon: Icons.home_rounded, label: 'Home'),
-      _NavItem(icon: Icons.timer_outlined, label: 'Focus'),
-      _NavItem(icon: Icons.insights_rounded, label: 'Stats'),
+    const items = [
+      _NavItem(
+        selectedIcon: Icons.space_dashboard_rounded,
+        unselectedIcon: Icons.space_dashboard_outlined,
+        label: 'Home',
+      ),
+      _NavItem(
+        selectedIcon: Icons.hourglass_bottom_rounded,
+        unselectedIcon: Icons.hourglass_empty_rounded,
+        label: 'Focus',
+      ),
+      _NavItem(
+        selectedIcon: Icons.analytics_rounded,
+        unselectedIcon: Icons.analytics_outlined,
+        label: 'Stats',
+      ),
     ];
 
     return Container(
@@ -907,9 +919,11 @@ class RefocusBottomNavigation extends StatelessWidget {
               return InkWell(
                 onTap: () => onTap(index),
                 borderRadius: BorderRadius.circular(AppRadius.large),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 18,
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  curve: Curves.easeOutCubic,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: isSelected ? 18 : 14,
                     vertical: 8,
                   ),
                   decoration: BoxDecoration(
@@ -935,11 +949,11 @@ class RefocusBottomNavigation extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Icon(
-                        item.icon,
+                        isSelected ? item.selectedIcon : item.unselectedIcon,
                         color: isSelected
                             ? const Color(0xFF090A0F)
-                            : AppColors.textMuted,
-                        size: 20,
+                            : AppColors.textSecondary,
+                        size: 22,
                       ),
                       if (isSelected) ...[
                         const SizedBox(width: 8),
@@ -949,6 +963,7 @@ class RefocusBottomNavigation extends StatelessWidget {
                             color: const Color(0xFF090A0F),
                             fontSize: 13,
                             fontWeight: FontWeight.w800,
+                            letterSpacing: 0.3,
                           ),
                         ),
                       ],
@@ -965,10 +980,15 @@ class RefocusBottomNavigation extends StatelessWidget {
 }
 
 class _NavItem {
-  final IconData icon;
+  final IconData selectedIcon;
+  final IconData unselectedIcon;
   final String label;
 
-  const _NavItem({required this.icon, required this.label});
+  const _NavItem({
+    required this.selectedIcon,
+    required this.unselectedIcon,
+    required this.label,
+  });
 }
 
 // =============================================================================
