@@ -106,10 +106,25 @@ class _FocusTimerScreenState extends ConsumerState<FocusTimerScreen> with Widget
         ? activeSession.label!
         : 'Deep Focus';
 
+    final isLockedWithoutPin =
+        activeSession.isLockedMode && !sessionState.isScreenPinned;
+    final isLockedWithPin =
+        activeSession.isLockedMode && sessionState.isScreenPinned;
+
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, _) {
         if (didPop) return;
+        if (isLockedWithoutPin) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Session is in Locked Mode. Early cancellation is disabled.'),
+              backgroundColor: AppColors.danger,
+              duration: Duration(seconds: 2),
+            ),
+          );
+          return;
+        }
         _promptStopSession(
           context,
           activeSession.strictModeType,
@@ -130,6 +145,16 @@ class _FocusTimerScreenState extends ConsumerState<FocusTimerScreen> with Widget
                     IconButton(
                       icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
                       onPressed: () {
+                        if (isLockedWithoutPin) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Session is in Locked Mode. Early cancellation is disabled.'),
+                              backgroundColor: AppColors.danger,
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
+                          return;
+                        }
                         _promptStopSession(
                           context,
                           activeSession.strictModeType,
@@ -340,7 +365,39 @@ class _FocusTimerScreenState extends ConsumerState<FocusTimerScreen> with Widget
                 const Spacer(flex: 1),
 
                 // Stop / Commitment UI Control
-                if (activeSession.isLockedMode)
+                if (isLockedWithoutPin)
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    decoration: BoxDecoration(
+                      color: AppColors.surfaceContainerHigh,
+                      borderRadius: AppRadius.smallRadius,
+                      border: Border.all(color: AppColors.danger, width: AppBorders.standard),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: AppColors.shadowColor,
+                          offset: Offset(3, 3),
+                          blurRadius: 0,
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Icons.lock_rounded, color: AppColors.danger, size: 18),
+                        const SizedBox(width: 10),
+                        Text(
+                          'Locked Mode • Runs until timer finishes',
+                          style: GoogleFonts.inter(
+                            color: AppColors.danger,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                else if (isLockedWithPin)
                   Column(
                     children: [
                       Container(
@@ -364,7 +421,7 @@ class _FocusTimerScreenState extends ConsumerState<FocusTimerScreen> with Widget
                             const Icon(Icons.lock_rounded, color: AppColors.danger, size: 16),
                             const SizedBox(width: 8),
                             Text(
-                              'Locked Mode Active',
+                              'Locked Mode • Screen Pinned',
                               style: GoogleFonts.inter(
                                 color: AppColors.danger,
                                 fontSize: 13,
