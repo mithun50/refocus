@@ -84,6 +84,7 @@ class _StrictModeStopDialogState extends State<StrictModeStopDialog> {
             height: 1.4,
           ),
         ),
+        actionsPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
@@ -93,7 +94,7 @@ class _StrictModeStopDialogState extends State<StrictModeStopDialog> {
             text: 'Stop Session',
             variant: RefocusButtonVariant.danger,
             isFullWidth: false,
-            height: 42,
+            height: 44,
             onPressed: () {
               Navigator.pop(context);
               widget.onConfirmStop();
@@ -133,49 +134,52 @@ class _StrictModeStopDialogState extends State<StrictModeStopDialog> {
           ),
         ],
       ),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'You enabled Friction Mode to protect your deep focus. Early cancellation requires confirmation.',
-            style: GoogleFonts.inter(
-              color: AppColors.textSecondary,
-              fontSize: 13,
-              height: 1.4,
-            ),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'Type "STOP" to confirm:',
-            style: GoogleFonts.inter(
-              color: AppColors.textPrimary,
-              fontWeight: FontWeight.w700,
-              fontSize: 13,
-            ),
-          ),
-          const SizedBox(height: 8),
-          TextField(
-            controller: _confirmController,
-            autofocus: true,
-            onChanged: (_) => setState(() {}),
-            decoration: const InputDecoration(
-              hintText: 'Type STOP',
-            ),
-          ),
-          if (_countdown > 0) ...[
-            const SizedBox(height: 12),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
             Text(
-              'Please pause for $_countdown seconds to reconsider...',
+              'You enabled Friction Mode to protect your deep focus. Early cancellation requires confirmation.',
               style: GoogleFonts.inter(
-                color: AppColors.amber,
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
+                color: AppColors.textSecondary,
+                fontSize: 13,
+                height: 1.4,
               ),
             ),
+            const SizedBox(height: 16),
+            Text(
+              'Type "STOP" to confirm:',
+              style: GoogleFonts.inter(
+                color: AppColors.textPrimary,
+                fontWeight: FontWeight.w700,
+                fontSize: 13,
+              ),
+            ),
+            const SizedBox(height: 8),
+            TextField(
+              controller: _confirmController,
+              autofocus: true,
+              onChanged: (_) => setState(() {}),
+              decoration: const InputDecoration(
+                hintText: 'Type STOP',
+              ),
+            ),
+            if (_countdown > 0) ...[
+              const SizedBox(height: 12),
+              Text(
+                'Please pause for $_countdown seconds to reconsider...',
+                style: GoogleFonts.inter(
+                  color: AppColors.amber,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
           ],
-        ],
+        ),
       ),
+      actionsPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
@@ -185,7 +189,7 @@ class _StrictModeStopDialogState extends State<StrictModeStopDialog> {
           text: 'Give Up & Stop',
           variant: RefocusButtonVariant.danger,
           isFullWidth: false,
-          height: 42,
+          height: 44,
           onPressed: canStop
               ? () {
                   Navigator.pop(context);

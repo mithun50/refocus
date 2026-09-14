@@ -77,73 +77,77 @@ class _SessionSetupScreenState extends ConsumerState<SessionSetupScreen> {
             ),
           ],
         ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Lock phone to Refocus for this session',
-              style: GoogleFonts.inter(
-                color: AppColors.textPrimary,
-                fontWeight: FontWeight.w700,
-                fontSize: 14,
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Lock phone to Refocus for this session',
+                style: GoogleFonts.inter(
+                  color: AppColors.textPrimary,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 14,
+                ),
               ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'During your focus session, your device is pinned strictly to Refocus. The home button, recent apps overview, and status bar are unavailable.',
-              style: GoogleFonts.inter(
-                color: AppColors.textSecondary,
-                fontSize: 12,
-                height: 1.4,
+              const SizedBox(height: 8),
+              Text(
+                'During your focus session, your device is pinned strictly to Refocus. The home button, recent apps overview, and status bar are unavailable.',
+                style: GoogleFonts.inter(
+                  color: AppColors.textSecondary,
+                  fontSize: 12,
+                  height: 1.4,
+                ),
               ),
-            ),
-            const SizedBox(height: 14),
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: AppColors.surface,
-                borderRadius: AppRadius.smallRadius,
-                border: Border.all(color: AppColors.borderPrimary, width: AppBorders.standard),
-                boxShadow: const [
-                  BoxShadow(
-                    color: AppColors.shadowColor,
-                    offset: Offset(2, 2),
-                    blurRadius: 0,
-                  ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      const Icon(Icons.info_outline_rounded, color: AppColors.accentCyan, size: 16),
-                      const SizedBox(width: 8),
-                      Text(
-                        'How to exit anytime',
-                        style: GoogleFonts.inter(
-                          color: AppColors.accentCyan,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 12,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    'Use Android\'s standard system exit gesture (touch and hold Back and Overview/Recents, or swipe up and hold). Exiting via gesture will be logged as an interrupted session.',
-                    style: GoogleFonts.inter(
-                      color: AppColors.textSecondary,
-                      fontSize: 11,
-                      height: 1.3,
+              const SizedBox(height: 14),
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: AppColors.surface,
+                  borderRadius: AppRadius.smallRadius,
+                  border: Border.all(color: AppColors.borderPrimary, width: AppBorders.standard),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: AppColors.shadowColor,
+                      offset: Offset(2, 2),
+                      blurRadius: 0,
                     ),
-                  ),
-                ],
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        const Icon(Icons.info_outline_rounded, color: AppColors.accentCyan, size: 16),
+                        const SizedBox(width: 8),
+                        Text(
+                          'How to exit anytime',
+                          style: GoogleFonts.inter(
+                            color: AppColors.accentCyan,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      'Use Android\'s standard system exit gesture (touch and hold Back and Overview/Recents, or swipe up and hold). Exiting via gesture will be logged as an interrupted session.',
+                      style: GoogleFonts.inter(
+                        color: AppColors.textSecondary,
+                        fontSize: 11,
+                        height: 1.3,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
+        actionsPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+        actionsOverflowButtonSpacing: 8,
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
@@ -152,7 +156,7 @@ class _SessionSetupScreenState extends ConsumerState<SessionSetupScreen> {
           RefocusButton(
             text: 'I Understand & Enable',
             isFullWidth: false,
-            height: 42,
+            height: 44,
             onPressed: () => Navigator.of(context).pop(true),
           ),
         ],

@@ -19,6 +19,7 @@ class RefocusButton extends StatefulWidget {
   final double height;
   final EdgeInsetsGeometry? padding;
   final double? borderRadius;
+  final double? fontSize;
 
   const RefocusButton({
     super.key,
@@ -33,6 +34,7 @@ class RefocusButton extends StatefulWidget {
     this.height = 54.0,
     this.padding,
     this.borderRadius,
+    this.fontSize,
   });
 
   @override
@@ -119,34 +121,43 @@ class _RefocusButtonState extends State<RefocusButton> {
         break;
     }
 
+    final effectiveFontSize = widget.fontSize ??
+        (widget.height <= 38.0
+            ? 12.0
+            : (widget.height <= 46.0 ? 13.5 : 15.0));
+
     Widget content = Row(
       mainAxisSize: widget.isFullWidth ? MainAxisSize.max : MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         if (widget.isLoading) ...[
           SizedBox(
-            width: 18,
-            height: 18,
+            width: widget.height <= 44 ? 14 : 18,
+            height: widget.height <= 44 ? 14 : 18,
             child: CircularProgressIndicator(
-              strokeWidth: 2.5,
+              strokeWidth: 2.0,
               valueColor: AlwaysStoppedAnimation<Color>(fg),
             ),
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: 8),
         ] else if (widget.leading != null) ...[
           widget.leading!,
           const SizedBox(width: 8),
         ] else if (widget.icon != null) ...[
-          Icon(widget.icon, size: 20, color: fg),
+          Icon(widget.icon, size: widget.height <= 44 ? 18 : 20, color: fg),
           const SizedBox(width: 8),
         ],
-        Text(
-          widget.text,
-          style: GoogleFonts.inter(
-            color: fg,
-            fontSize: 15,
-            fontWeight: FontWeight.w800,
-            letterSpacing: 0.3,
+        Flexible(
+          child: Text(
+            widget.text,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: GoogleFonts.inter(
+              color: fg,
+              fontSize: effectiveFontSize,
+              fontWeight: FontWeight.w800,
+              letterSpacing: 0.3,
+            ),
           ),
         ),
         if (widget.trailing != null && !widget.isLoading) ...[
@@ -182,12 +193,17 @@ class _RefocusButtonState extends State<RefocusButton> {
             child: InkWell(
               onTap: isDisabled ? null : widget.onPressed,
               borderRadius: BorderRadius.circular(effectiveRadius),
-              splashColor: AppColors.neonMint.withOpacity(0.15),
+              splashColor: AppColors.neonMint.withValues(alpha: 0.15),
               highlightColor: Colors.transparent,
-              child: Padding(
-                padding: widget.padding ??
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                child: content,
+              child: Center(
+                widthFactor: widget.isFullWidth ? null : 1.0,
+                child: Padding(
+                  padding: widget.padding ??
+                      EdgeInsets.symmetric(
+                        horizontal: widget.isFullWidth ? 20 : 16,
+                      ),
+                  child: content,
+                ),
               ),
             ),
           ),

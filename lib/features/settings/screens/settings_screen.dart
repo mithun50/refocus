@@ -388,20 +388,23 @@ class SettingsScreen extends ConsumerWidget {
             ),
           ],
         ),
-        content: TextField(
-          controller: controller,
-          autofocus: true,
-          textCapitalization: TextCapitalization.words,
-          style: GoogleFonts.inter(
-            color: AppColors.textPrimary,
-            fontSize: 15,
-            fontWeight: FontWeight.w600,
-          ),
-          decoration: const InputDecoration(
-            hintText: 'Enter your name',
-            prefixIcon: Icon(Icons.person_outline_rounded, color: AppColors.primary),
+        content: SingleChildScrollView(
+          child: TextField(
+            controller: controller,
+            autofocus: true,
+            textCapitalization: TextCapitalization.words,
+            style: GoogleFonts.inter(
+              color: AppColors.textPrimary,
+              fontSize: 15,
+              fontWeight: FontWeight.w600,
+            ),
+            decoration: const InputDecoration(
+              hintText: 'Enter your name',
+              prefixIcon: Icon(Icons.person_outline_rounded, color: AppColors.primary),
+            ),
           ),
         ),
+        actionsPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(),
@@ -410,7 +413,7 @@ class SettingsScreen extends ConsumerWidget {
           RefocusButton(
             text: 'Save',
             isFullWidth: false,
-            height: 42,
+            height: 44,
             onPressed: () async {
               final newName = controller.text.trim();
               if (newName.isNotEmpty) {

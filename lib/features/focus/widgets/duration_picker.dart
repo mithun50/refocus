@@ -92,15 +92,18 @@ class DurationPicker extends StatelessWidget {
             ),
           ],
         ),
-        content: TextField(
-          controller: controller,
-          keyboardType: TextInputType.number,
-          autofocus: true,
-          decoration: const InputDecoration(
-            labelText: 'Duration in minutes',
-            suffixText: 'min',
+        content: SingleChildScrollView(
+          child: TextField(
+            controller: controller,
+            keyboardType: TextInputType.number,
+            autofocus: true,
+            decoration: const InputDecoration(
+              labelText: 'Duration in minutes',
+              suffixText: 'min',
+            ),
           ),
         ),
+        actionsPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(),
@@ -109,7 +112,7 @@ class DurationPicker extends StatelessWidget {
           RefocusButton(
             text: 'Apply',
             isFullWidth: false,
-            height: 42,
+            height: 44,
             onPressed: () {
               final val = int.tryParse(controller.text);
               if (val != null && val > 0 && val <= 720) {
