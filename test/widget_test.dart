@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:refocus_again/app/theme.dart';
+import 'package:refocus_again/core/constants/app_constants.dart';
 import 'package:refocus_again/core/models/focus_session.dart';
 import 'package:refocus_again/core/models/installed_app.dart';
+import 'package:refocus_again/core/providers/core_providers.dart';
 import 'package:refocus_again/core/services/permission_service.dart';
 import 'package:refocus_again/core/utils/time_utils.dart';
 import 'package:refocus_again/core/widgets/refocus_components.dart';
+import 'package:refocus_again/features/onboarding/providers/onboarding_provider.dart';
+import 'package:refocus_again/features/onboarding/screens/name_setup_screen.dart';
 
 void main() {
   group('TimeUtils Tests', () {
@@ -189,4 +195,56 @@ void main() {
       expect(find.text('25m planned'), findsOneWidget);
     });
   });
+
+  group('User Profile & Onboarding Name Tests', () {
+    test('UserNameNotifier reads initial value from SharedPreferences', () async {
+      SharedPreferences.setMockInitialValues({
+        AppConstants.keyUserName: 'Alex',
+      });
+      final prefs = await SharedPreferences.getInstance();
+      final notifier = UserNameNotifier(prefs);
+
+      expect(notifier.state, 'Alex');
+    });
+
+    test('UserNameNotifier updates and persists trimmed name', () async {
+      SharedPreferences.setMockInitialValues({});
+      final prefs = await SharedPreferences.getInstance();
+      final notifier = UserNameNotifier(prefs);
+
+      expect(notifier.state, '');
+
+      await notifier.setUserName('  Sarah Connor  ');
+      expect(notifier.state, 'Sarah Connor');
+      expect(prefs.getString(AppConstants.keyUserName), 'Sarah Connor');
+    });
+
+    testWidgets('NameSetupScreen renders title and disables button when empty', (tester) async {
+      SharedPreferences.setMockInitialValues({});
+      final prefs = await SharedPreferences.getInstance();
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            sharedPreferencesProvider.overrideWithValue(prefs),
+          ],
+          child: MaterialApp(
+            theme: AppTheme.darkTheme,
+            home: const NameSetupScreen(),
+          ),
+        ),
+      );
+
+      expect(find.text('What should we call you?'), findsOneWidget);
+      expect(find.text('Enter your name'), findsOneWidget);
+      expect(find.text('Continue'), findsOneWidget);
+
+      // Verify typing a name activates continue
+      await tester.enterText(find.byType(TextField), 'John Doe');
+      await tester.pump();
+
+      expect(find.text('John Doe'), findsOneWidget);
+    });
+  });
 }
+

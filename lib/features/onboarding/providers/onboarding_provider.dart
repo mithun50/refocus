@@ -18,3 +18,21 @@ class OnboardingNotifier extends StateNotifier<bool> {
     state = true;
   }
 }
+
+final userNameProvider = StateNotifierProvider<UserNameNotifier, String>((ref) {
+  final prefs = ref.watch(sharedPreferencesProvider);
+  return UserNameNotifier(prefs);
+});
+
+class UserNameNotifier extends StateNotifier<String> {
+  final dynamic _prefs;
+
+  UserNameNotifier(this._prefs)
+      : super(_prefs.getString(AppConstants.keyUserName) ?? '');
+
+  Future<void> setUserName(String name) async {
+    final trimmed = name.trim();
+    await _prefs.setString(AppConstants.keyUserName, trimmed);
+    state = trimmed;
+  }
+}

@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../../app/theme.dart';
 import '../../../core/providers/core_providers.dart';
 import '../../../core/widgets/refocus_components.dart';
+import '../../onboarding/providers/onboarding_provider.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -14,6 +15,7 @@ class SettingsScreen extends ConsumerWidget {
     final permissionsAsync = ref.watch(permissionStatusProvider);
     final permissionService = ref.watch(permissionServiceProvider);
     final notifBlockingEnabled = ref.watch(notificationBlockingEnabledProvider);
+    final userName = ref.watch(userNameProvider);
 
     return Scaffold(
       body: SafeArea(
@@ -51,6 +53,38 @@ class SettingsScreen extends ConsumerWidget {
               child: ListView(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
                 children: [
+                  // SECTION 0: PROFILE & PERSONALIZATION
+                  RefocusSectionHeader(title: 'Profile & Personalization'),
+                  const SizedBox(height: 12),
+                  RefocusCard(
+                    tonalElevation: 2,
+                    borderRadius: AppRadius.large,
+                    padding: EdgeInsets.zero,
+                    child: ListTile(
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
+                      leading: const Icon(Icons.person_rounded, color: AppColors.primary),
+                      title: Text(
+                        'Your Name',
+                        style: GoogleFonts.inter(
+                          color: AppColors.textPrimary,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 14,
+                        ),
+                      ),
+                      subtitle: Text(
+                        userName.isNotEmpty ? userName : 'Not set (tap to configure)',
+                        style: GoogleFonts.inter(
+                          color: userName.isNotEmpty ? AppColors.textSecondary : AppColors.amber,
+                          fontSize: 12,
+                        ),
+                      ),
+                      trailing: const Icon(Icons.edit_outlined, size: 16, color: AppColors.primary),
+                      onTap: () => _showEditNameDialog(context, ref),
+                    ),
+                  ),
+
+                  const SizedBox(height: 28),
+
                   // SECTION 1: FOCUS CONTROLS
                   RefocusSectionHeader(title: 'Focus Controls'),
                   const SizedBox(height: 12),
@@ -324,6 +358,70 @@ class SettingsScreen extends ConsumerWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  void _showEditNameDialog(BuildContext context, WidgetRef ref) {
+    final currentName = ref.read(userNameProvider);
+    final controller = TextEditingController(text: currentName);
+
+    showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        backgroundColor: AppColors.surface,
+        shape: RoundedRectangleBorder(
+          borderRadius: AppRadius.largeRadius,
+          side: const BorderSide(color: AppColors.border, width: 2.0),
+        ),
+        title: Row(
+          children: [
+            const Icon(Icons.badge_outlined, color: AppColors.primary, size: 22),
+            const SizedBox(width: 10),
+            Text(
+              'Your Name',
+              style: GoogleFonts.outfit(
+                color: AppColors.textPrimary,
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ],
+        ),
+        content: TextField(
+          controller: controller,
+          autofocus: true,
+          textCapitalization: TextCapitalization.words,
+          style: GoogleFonts.inter(
+            color: AppColors.textPrimary,
+            fontSize: 15,
+            fontWeight: FontWeight.w600,
+          ),
+          decoration: const InputDecoration(
+            hintText: 'Enter your name',
+            prefixIcon: Icon(Icons.person_outline_rounded, color: AppColors.primary),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: const Text('Cancel', style: TextStyle(color: AppColors.textSecondary)),
+          ),
+          RefocusButton(
+            text: 'Save',
+            isFullWidth: false,
+            height: 42,
+            onPressed: () async {
+              final newName = controller.text.trim();
+              if (newName.isNotEmpty) {
+                await ref.read(userNameProvider.notifier).setUserName(newName);
+              }
+              if (dialogContext.mounted) {
+                Navigator.of(dialogContext).pop();
+              }
+            },
+          ),
+        ],
       ),
     );
   }

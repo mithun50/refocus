@@ -3,9 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../app/theme.dart';
+import '../../../core/constants/app_constants.dart';
 import '../../../core/widgets/refocus_components.dart';
 import '../../home/providers/home_provider.dart';
 import '../../history/providers/history_provider.dart';
+import '../../onboarding/providers/onboarding_provider.dart';
 import '../../wellbeing/providers/wellbeing_provider.dart';
 import '../providers/focus_session_provider.dart';
 
@@ -16,6 +18,8 @@ class SessionCompleteScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final sessionState = ref.watch(focusSessionProvider);
     final session = sessionState.lastCompletedSession;
+    final savedName = ref.watch(userNameProvider);
+    final userName = savedName.isNotEmpty ? savedName : AppConstants.defaultUserName;
 
     final durationMins = session != null ? (session.durationSeconds ~/ 60) : 25;
     final subjectName = session?.label?.isNotEmpty == true ? session!.label! : 'Deep Focus';
@@ -74,7 +78,7 @@ class SessionCompleteScreen extends ConsumerWidget {
               ),
               const SizedBox(height: 6),
               Text(
-                'Great job, Nevil.',
+                'Great job, $userName.',
                 style: GoogleFonts.inter(
                   color: AppColors.secondary,
                   fontSize: 16,

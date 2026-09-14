@@ -55,7 +55,7 @@ class _PermissionSetupScreenState extends ConsumerState<PermissionSetupScreen>
                       if (context.canPop()) {
                         context.pop();
                       } else {
-                        context.go('/onboarding');
+                        context.go('/onboarding/name');
                       }
                     },
                   ),

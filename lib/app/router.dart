@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../features/onboarding/screens/welcome_screen.dart';
+import '../features/onboarding/screens/name_setup_screen.dart';
 import '../features/onboarding/screens/permission_setup_screen.dart';
 import '../features/onboarding/providers/onboarding_provider.dart';
 import '../features/home/screens/home_screen.dart';
@@ -23,6 +24,10 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/onboarding',
         builder: (context, state) => const WelcomeScreen(),
         routes: [
+          GoRoute(
+            path: 'name',
+            builder: (context, state) => const NameSetupScreen(),
+          ),
           GoRoute(
             path: 'permissions',
             builder: (context, state) => const PermissionSetupScreen(),

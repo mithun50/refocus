@@ -4,11 +4,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../app/theme.dart';
+import '../../../core/constants/app_constants.dart';
 import '../../../core/models/focus_session.dart';
 import '../../../core/utils/time_utils.dart';
 import '../../../core/widgets/refocus_components.dart';
 import '../../focus/providers/focus_session_provider.dart';
 import '../../focus/providers/timer_provider.dart';
+import '../../onboarding/providers/onboarding_provider.dart';
 import '../../wellbeing/providers/wellbeing_provider.dart';
 import '../providers/home_provider.dart';
 
@@ -115,14 +117,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with WidgetsBindingObse
                             const SizedBox(height: 2),
                             Row(
                               children: [
-                                Text(
-                                  'Nevil',
-                                  style: GoogleFonts.outfit(
-                                    color: AppColors.textPrimary,
-                                    fontSize: 26,
-                                    fontWeight: FontWeight.w800,
-                                    letterSpacing: -0.5,
-                                  ),
+                                Builder(
+                                  builder: (context) {
+                                    final savedName = ref.watch(userNameProvider);
+                                    final displayName = savedName.isNotEmpty ? savedName : AppConstants.defaultUserName;
+                                    return Text(
+                                      displayName,
+                                      style: GoogleFonts.outfit(
+                                        color: AppColors.textPrimary,
+                                        fontSize: 26,
+                                        fontWeight: FontWeight.w800,
+                                        letterSpacing: -0.5,
+                                      ),
+                                    );
+                                  },
                                 ),
                                 const SizedBox(width: 6),
                                 const Text('👋', style: TextStyle(fontSize: 22)),

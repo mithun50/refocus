@@ -111,7 +111,7 @@ class WelcomeScreen extends StatelessWidget {
               RefocusButton(
                 text: 'Get Started',
                 icon: Icons.arrow_forward_rounded,
-                onPressed: () => context.push('/onboarding/permissions'),
+                onPressed: () => context.push('/onboarding/name'),
               ),
             ],
           ),
