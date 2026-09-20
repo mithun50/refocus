@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "671334082224",
-    "project_id": "refocus-1a3cd",
-    "storage_bucket": "refocus-1a3cd.firebasestorage.app"
+    "project_number": "000000000000",
+    "project_id": "your-firebase-project-id",
+    "storage_bucket": "your-firebase-project-id.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:671334082224:android:f3b0519c6b6e423e9f3d75",
+        "mobilesdk_app_id": "1:000000000000:android:0000000000000000000000",
         "android_client_info": {
           "package_name": "com.refocusagain.refocus_again"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAlSIfEF7veMX_9qX-xngfouff4H5Qhz0g"
+          "current_key": "YOUR_FIREBASE_API_KEY_HERE"
         }
       ],
       "services": {

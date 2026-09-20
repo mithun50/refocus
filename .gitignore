@@ -10,6 +10,7 @@
 .history
 .svn/
 .swiftpm/
+.kotlin/
 migrate_working_dir/
 
 # IntelliJ related
@@ -50,3 +51,6 @@ app.*.map.json
 key.properties
 local.properties
 
+# Firebase credentials
+android/app/google-services.json
+!android/app/google-services.json.example
