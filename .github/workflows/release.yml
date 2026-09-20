@@ -1,0 +1,96 @@
+name: Auto Release on Version Bump
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Read app version
+        id: version
+        run: |
+          VERSION=$(grep '^version:' pubspec.yaml | awk '{print $2}')
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=v$VERSION" >> "$GITHUB_OUTPUT"
+          echo "App version: $VERSION"
+
+      - name: Check if release already exists
+        id: check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if gh release view "${{ steps.version.outputs.tag }}" >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "Release ${{ steps.version.outputs.tag }} already exists, skipping build."
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+            echo "New version detected: ${{ steps.version.outputs.tag }}"
+          fi
+
+      - name: Set up Java 17
+        if: steps.check.outputs.exists == 'false'
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Set up Flutter
+        if: steps.check.outputs.exists == 'false'
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Install Dependencies
+        if: steps.check.outputs.exists == 'false'
+        run: flutter pub get
+
+      - name: Analyze
+        if: steps.check.outputs.exists == 'false'
+        run: flutter analyze
+
+      - name: Run Tests
+        if: steps.check.outputs.exists == 'false'
+        run: flutter test
+
+      - name: Restore release keystore
+        if: steps.check.outputs.exists == 'false'
+        run: |
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > android/app/upload-keystore.jks
+          cat > android/key.properties <<EOF
+          storePassword=${{ secrets.KEYSTORE_PASSWORD }}
+          keyPassword=${{ secrets.KEY_PASSWORD }}
+          keyAlias=${{ secrets.KEY_ALIAS }}
+          storeFile=upload-keystore.jks
+          EOF
+
+      - name: Build Release APK
+        if: steps.check.outputs.exists == 'false'
+        run: flutter build apk --release
+
+      - name: Build Release App Bundle
+        if: steps.check.outputs.exists == 'false'
+        run: flutter build appbundle --release
+
+      - name: Create GitHub Release
+        if: steps.check.outputs.exists == 'false'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "${{ steps.version.outputs.tag }}" \
+            --title "Refocus ${{ steps.version.outputs.tag }}" \
+            --generate-notes \
+            build/app/outputs/flutter-apk/app-release.apk \
+            build/app/outputs/bundle/release/app-release.aab
