@@ -52,5 +52,5 @@ key.properties
 local.properties
 
 # Firebase credentials
-android/app/google-services.json
+!android/app/google-services.json
 !android/app/google-services.json.example
