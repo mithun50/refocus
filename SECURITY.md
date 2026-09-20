@@ -57,7 +57,6 @@ Refocus is built according to strict privacy-by-design principles:
 - Refocus leverages Android's official `startLockTask()` / Screen Pinning API.
 - Android's native physical safety exit gesture (holding Back + Overview) is intentionally preserved to ensure users can reach emergency services (`com.android.emergency`, `com.google.android.dialer`, etc.) at all times.
 
-### 4. 100% On-Device Data Storage
-- Refocus operates completely offline.
-- No network requests, analytics trackers, or remote telemetry frameworks are included in the codebase.
-- Focus sessions, streak records, and configured blocked app packages are stored strictly within the protected Android application sandbox (`/data/data/com.refocusagain.refocus_again/databases/refocus.db`).
+### 4. Privacy & Telemetry Standards
+- Focus sessions, streak records, user profiles, and configured blocked app packages are stored strictly within the protected Android application sandbox (`/data/data/com.refocusagain.refocus_again/databases/refocus.db`).
+- Privacy-preserving Google Analytics for Firebase is configured for aggregate download/install counts and feature milestone analytics. No personal identification data, message contents, or browsing histories are ever collected.

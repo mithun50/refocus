@@ -11,7 +11,7 @@ This document serves as the primary system specification and operational guideli
 ### Core Philosophy
 - **Zero-Bypass Native Intervention**: App launches for blacklisted applications are intercepted at the OS level via `RefocusAccessibilityService` within milliseconds.
 - **Safety Valve Intact**: User safety always supersedes app enforcement. The device physical gesture to unpin (holding Back + Overview) must never be compromised or disabled.
-- **100% Offline & Private**: No analytics, no remote tracking, no internet communication. Everything runs and persists strictly on-device in local SQLite.
+- **Local-First & Private**: Focus sessions, app blacklist settings, and streaks persist strictly on-device in local SQLite. Firebase Analytics is used solely for aggregate app download/install and feature milestone telemetry without recording PII.
 
 ---
 

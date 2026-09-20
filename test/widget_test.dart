@@ -11,6 +11,7 @@ import 'package:refocus_again/core/services/permission_service.dart';
 import 'package:refocus_again/core/utils/time_utils.dart';
 import 'package:refocus_again/core/widgets/refocus_components.dart';
 import 'package:refocus_again/core/services/analytics_service.dart';
+import 'package:refocus_again/core/services/firebase_analytics_dispatcher.dart';
 import 'package:refocus_again/features/focus/widgets/strict_mode_dialog.dart';
 import 'package:refocus_again/features/onboarding/providers/onboarding_provider.dart';
 import 'package:refocus_again/features/onboarding/screens/name_setup_screen.dart';
@@ -265,6 +266,10 @@ void main() {
       expect(capturedEvents, contains('terms_and_privacy_accepted'));
       expect(capturedEvents, contains('locked_mode_emergency_exit'));
       expect(analytics.recentEvents.any((e) => e.name == 'locked_mode_emergency_exit'), true);
+    });
+
+    test('FirebaseAnalyticsDispatcher implements AnalyticsDispatcher contract', () {
+      expect(FirebaseAnalyticsDispatcher.new, isA<Function>());
     });
   });
 
