@@ -139,6 +139,7 @@ We welcome contributions of all kinds! Please see the following guides:
 - 📜 [Code of Conduct](CODE_OF_CONDUCT.md) — Standards and expectations for the Refocus community.
 - 🤖 [Agent Guide (AGENTS.md)](AGENTS.md) — Architectural guardrails and operational manual for AI/LLM assistants.
 - 🛡️ [Security Policy](SECURITY.md) — Responsible vulnerability reporting and privacy architecture.
+- ⚖️ [Privacy Policy & Terms of Service](PRIVACY_AND_TERMS.md) — Complete Google Play compliance and legal terms.
 
 ---
 
