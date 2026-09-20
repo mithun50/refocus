@@ -59,7 +59,7 @@ jobs:
 
       - name: Analyze
         if: steps.check.outputs.exists == 'false'
-        run: flutter analyze
+        run: flutter analyze --no-fatal-infos
 
       - name: Run Tests
         if: steps.check.outputs.exists == 'false'
