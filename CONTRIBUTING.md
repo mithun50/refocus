@@ -147,7 +147,7 @@ All screens in Refocus adhere to our **Neo-Brutalism** aesthetic:
 
 - Follow standard [Effective Dart](https://dart.dev/guides/language/effective-dart) guidelines.
 - Always run `flutter analyze` prior to committing; fix all warnings and avoid deprecated methods.
-- Keep widget trees modular—extract reusable components rather than creating monolithic build methods.
+- Keep widget trees modular - extract reusable components rather than creating monolithic build methods.
 - Use `GoogleFonts.inter` for body and UI copy, and `GoogleFonts.outfit` for primary headers and numbers.
 
 ### Kotlin & Android

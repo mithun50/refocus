@@ -17,8 +17,8 @@
 ##  Features
 
 ### Track Your Focus & Analytics
-- **Interactive 7-Day Focus Graph**: Real-time weekly bar charts (Mon–Sun) tracking focused minutes against daily goals.
-- **Focus Mastery Score (0–100)**: Visual arc gauge measuring study consistency, streak retention, and session completion rate.
+- **Interactive 7-Day Focus Graph**: Real-time weekly bar charts (Mon to Sun) tracking focused minutes against daily goals.
+- **Focus Mastery Score (0 to 100)**: Visual arc gauge measuring study consistency, streak retention, and session completion rate.
 - **Peak Performance Window**: Hourly distribution analysis across Morning, Afternoon, Evening, and Night.
 - **Distraction Shield Metrics**: Track blocked distracting apps and completed vs interrupted sessions.
 
@@ -135,11 +135,11 @@
 ## Community & Contributing
 
 We welcome contributions of all kinds! Please see the following guides:
-- 📖 [Contributing Guide](CONTRIBUTING.md) — Setup, architecture, coding guidelines, and PR process.
-- 📜 [Code of Conduct](CODE_OF_CONDUCT.md) — Standards and expectations for the Refocus community.
-- 🤖 [Agent Guide (AGENTS.md)](AGENTS.md) — Architectural guardrails and operational manual for AI/LLM assistants.
-- 🛡️ [Security Policy](SECURITY.md) — Responsible vulnerability reporting and privacy architecture.
-- ⚖️ [Privacy Policy & Terms of Service](PRIVACY_AND_TERMS.md) — Complete Google Play compliance and legal terms.
+- [Contributing Guide](CONTRIBUTING.md) - Setup, architecture, coding guidelines, and PR process.
+- [Code of Conduct](CODE_OF_CONDUCT.md) - Standards and expectations for the Refocus community.
+- [Agent Guide (AGENTS.md)](AGENTS.md) - Architectural guardrails and operational manual for AI/LLM assistants.
+- [Security Policy](SECURITY.md) - Responsible vulnerability reporting and privacy architecture.
+- [Privacy Policy & Terms of Service](PRIVACY_AND_TERMS.md) - Complete Google Play compliance and legal terms.
 
 ---
 

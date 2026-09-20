@@ -1,4 +1,4 @@
-# AGENTS.md — Agent & AI Collaboration Guide
+# AGENTS.md - Agent and AI Collaboration Guide
 
 This document serves as the primary system specification and operational guidelines for **autonomous agents, LLM coding assistants, and automated contributors** interacting with the **Refocus** repository.
 
@@ -75,7 +75,7 @@ Under **NO circumstance** should an agent alter `SYSTEM_EXEMPT_PACKAGES` in `Blo
 
 ### Rule 2: Strict Neo-Brutalism Design Standard
 When building or modifying UI (either in Flutter or Android Native XML):
-- **Borders**: Solid, thick (`2.0dp` – `2.5dp`), high contrast (`#2E384D` or `#000000`).
+- **Borders**: Solid, thick (`2.0dp` to `2.5dp`), high contrast (`#2E384D` or `#000000`).
 - **Shadows**: Hard offset (`4dp` x `4dp`), **ZERO BLUR** (`#000000`). Never use soft gradients or diffuse shadows.
 - **Corner Radii**: Confident, sharp (`AppRadius.none = 0`, `AppRadius.large = 4px`). Never use large rounded pills or stadium shapes.
 - **Base Canvas**: Deep Obsidian (`#090A0F`). No semi-transparent frosted glass (`BackdropFilter` is strictly banned).
